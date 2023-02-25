@@ -1,0 +1,34 @@
+# Menggunakan Docker Compose versi 2 atau lebih.
+# Menggunakan Docker Compose teranyar https://docs.docker.com/compose/compose-file/compose-file-v3/
+# Gunakan versi 2.x instead of 3.x karena keterbatasan laptop jadul via https://docs.docker.com/compose/release-notes/
+version: "2.0"
+
+#Deklarasi - pendefinisian service
+services:
+  #Service pertama yang akan kita definisikan adalah item-app
+  item-app:
+    #Menggunakan image item-app dari github package
+    image: ghcr.io/tooopu/a433-microservices/item-app:v1
+    #Melakukan port mapping agar dapat diakses dari port 80 di host.
+    ports:
+      - 80:8080
+    #Membuat skema item-app hanya berjalan setelah item-db diluncurkan.
+    depends_on:
+      - item-db
+    #Menerapkan restart policy pada berkas docker-compose.yml agar container selalu restart ketika terhenti.
+    #Always restart the container if it stops. If it is manually stopped, it is restarted only when Docker daemon restarts or the container itself is manually restarted.
+    restart: always
+
+  #Selanjutnya, kita definisikan service untuk MongoDB dengan nama item-db
+  item-db:
+    #Menggunakan image mongo:3 dari Docker Hub.
+    image: mongo:3
+    #Memakai volume bernama app-db dengan target /data/db di container.
+    volumes:
+      - app-db:/data/db
+    #Menerapkan restart policy pada berkas docker-compose.yml agar container selalu restart ketika terhenti.
+    restart: always
+
+#Membuat volume bernama app-db.
+volumes:
+  app-db:
