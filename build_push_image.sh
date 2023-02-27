@@ -1,8 +1,5 @@
 #! /bin/bash
 
-# Arahkan ke folder proyek-pertama
-cd /opt/Downloads/a433-microservices
-
 # Membuat Docker image dari Dockerfile yang tadi dibuat, dengan nama image item-app, dan memiliki tag v1.
 docker build -t item-app:v1 .
 
