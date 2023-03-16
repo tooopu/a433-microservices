@@ -1,0 +1,32 @@
+# Use CircleCI version 2.1 
+version: 2.1
+# Add the orbs stanza below your version, invoking the orb:
+orbs:
+  docker: circleci/docker@2.2.0
+# Use docker elements in workflows (sesuai ketentuan untuk branch karsajobs) and jobs
+workflows:
+  lint-dockerfile:
+    jobs:
+      # Use hadolint to lint a Dockerfile
+      - docker/hadolint
+      steps:
+        - checkout
+        - docker/hadolint:
+            dockerfiles: Dockerfile
+  test-app:
+    jobs:
+      # This image can be used with the CircleCI docker executor, jalankan unit test untuk backend.
+      docker:
+        - image: cimg/go:1.20.2
+      steps:
+        - checkout
+        - run: go test -v -short --count=1 $(go list ./...)
+  build-app-karsajobs:
+    jobs:
+      # Build and push an image from bash script, get variable from project setting - environment
+      executor: docker/docker
+      steps:
+        - checkout
+        - setup_remote_docker
+        - run: |
+          . build_push_image_karsajobs.sh
