@@ -1,0 +1,30 @@
+# deklarasi apiVersion yang digunakan adalah apps/v1. Abstraksi tingkat tinggi seperti Deployment memiliki API group-nya sendiri sehingga bukan bagian dari API inti. 
+apiVersion: apps/v1
+# deklarasi kind yang mengindikasikan resource yang didefinisikan, yaitu Deployment
+kind: Deployment
+
+# deklarasi metadata yang berisi informasi yang relevan terkait resource dan dapat membantu dalam pengidentifikasian. Definisikan nama Deployment sebagai karsajobs-ui-deployment dan label dengan nilai app: karsajobs-fe.
+metadata:
+  name: karsajobs-ui-deployment
+  labels:
+    app: karsajobs-fe
+    tier: fe
+# deklarasi spec yang berisi spesifikasi resources.
+spec:
+# menyesuaikan jumlahnya 5 pod
+  replicas: 5
+  selector:
+    matchLabels:
+      tier: fe
+# Pod template (spesifikasi Pod)
+  template:
+# Definisikan label Deployment dengan karsajobs-fe.
+    metadata:
+      labels:
+        app: karsajobs-fe
+        tier: fe
+# spesifikasi container karsajobs-ui yang ada dalam Pod
+    spec:
+      containers:
+      - name: karsajobs-ui
+        image: ghcr.io/tooopu/a433-microservices/karsajobs-ui:latest

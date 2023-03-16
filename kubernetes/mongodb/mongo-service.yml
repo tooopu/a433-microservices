@@ -1,0 +1,19 @@
+# deklarasi apiVersion v1 (versi satu) adalah versi API inti yang berisi banyak resource paling umum seperti Pod dan Node.
+apiVersion: v1
+# deklarasi kind yang mengindikasikan resource yang didefinisikan, yaitu Service
+kind: Service
+
+# deklarasi metadata yang berisi informasi yang relevan terkait resource dan dapat membantu dalam pengidentifikasian. Definisikan nama Service sebagai mongo-service dan label dengan nilai app: karsajobs-db.
+metadata:
+  name: mongo-service
+  labels:
+    app: karsajobs-db
+# deklarasi spec yang berisi spesifikasi port.
+spec:
+  ports:
+# ekspos port 27017 
+  - port: 27017
+# menggunakan selector tier: db (database)
+  selector:
+    app: karsajobs-db
+    tier: db

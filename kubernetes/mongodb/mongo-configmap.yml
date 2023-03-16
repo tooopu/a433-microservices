@@ -1,0 +1,15 @@
+# deklarasi apiVersion v1 (versi satu) adalah versi API inti yang berisi banyak resource paling umum seperti Pod dan Node.
+apiVersion: v1
+# deklarasi kind yang mengindikasikan resource yang didefinisikan, yaitu ConfigMap
+kind: ConfigMap
+
+# deklarasi metadata yang berisi informasi yang relevan terkait resource dan dapat membantu dalam pengidentifikasian. Definisikan nama ConfigMap sebagai mongo-conf.
+metadata:
+  name: mongo-config
+# definisikan informasi sebagai key value dengan key bernama config dan value berisi string multiline (ditandai dengan “|”) berupa konfigurasi untuk mongo
+
+# Default: /data/db on Linux https://www.mongodb.com/docs/v3.2/reference/configuration-options/
+data:
+  config: |
+    storage:
+      dbPath: /data/db

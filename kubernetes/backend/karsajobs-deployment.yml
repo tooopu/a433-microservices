@@ -1,0 +1,48 @@
+# deklarasi apiVersion yang digunakan adalah apps/v1. Abstraksi tingkat tinggi seperti Deployment memiliki API group-nya sendiri sehingga bukan bagian dari API inti.
+apiVersion: apps/v1
+# deklarasi kind yang mengindikasikan resource yang didefinisikan, yaitu Deployment
+kind: Deployment
+
+# deklarasi metadata yang berisi informasi yang relevan terkait resource dan dapat membantu dalam pengidentifikasian. Definisikan nama Deployment sebagai karsajobs-deployment dan label dengan nilai app: karsajobs-be.
+metadata:
+  name: karsajobs-deployment
+  labels:
+    app: karsajobs-be
+    tier: be
+# deklarasi spec yang berisi spesifikasi resources.
+spec:
+# menyesuaikan jumlahnya 5 pod
+  replicas: 5
+  selector:
+    matchLabels:
+      tier: be
+# Pod template (spesifikasi Pod)
+  template:
+# Definisikan label Deployment dengan karsajobs-be.
+    metadata:
+      labels:
+        app: karsajobs-be
+        tier: be
+# spesifikasi container karsajobs yang ada dalam Pod
+    spec:
+      containers:
+      - name: karsajobs
+        image: ghcr.io/tooopu/a433-microservices/karsajobs:latest
+        ports:
+          - containerPort: 8080
+# definisikan variable bernama APP_PORT, MONGO_HOST, MONGO_USER, MONGO_PASS
+        env:
+          - name: APP_PORT
+            value: "8080"
+          - name: MONGO_HOST
+            value: $(MONGO_SERVICE_HOST)
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: MONGO_ROOT_USERNAME
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: MONGO_ROOT_PASSWORD

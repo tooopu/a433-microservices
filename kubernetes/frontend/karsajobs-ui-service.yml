@@ -1,0 +1,20 @@
+# deklarasi apiVersion v1 (versi satu) adalah versi API inti yang berisi banyak resource paling umum seperti Pod dan Node.
+apiVersion: v1
+# deklarasi kind yang mengindikasikan resource yang didefinisikan, yaitu Service
+kind: Service
+
+# deklarasi metadata yang berisi informasi yang relevan terkait resource dan dapat membantu dalam pengidentifikasian. Definisikan nama Service sebagai karsajobs-service dan label dengan nilai app: karsajobs-fe.
+metadata:
+  name: karsajobs-ui-service
+  labels:
+    app: karsajobs-fe
+# deklarasi spec yang berisi spesifikasi port untuk Service pada setiap Node di Cluster.
+spec:
+  ports:
+# ekspos port 8000 
+  - port: 8000
+  selector:
+# menggunakan selector tier: fe (front-end)
+    tier: fe
+# menggunakan tipe NodePort untuk membuat Service
+  type: NodePort
