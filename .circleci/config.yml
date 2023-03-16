@@ -8,7 +8,7 @@ workflows:
   lint-dockerfile:
     jobs:
       # Use hadolint to lint a Dockerfile
-      - docker/hadolint
+      executor: docker/hadolint
       steps:
         - checkout
         - docker/hadolint:
