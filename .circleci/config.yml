@@ -1,0 +1,28 @@
+# Use CircleCI version 2.1 
+version: 2.1
+# Add the orbs stanza below your version, invoking the orb:
+orbs:
+  docker: circleci/docker@2.2.0
+# Use docker elements in workflows (sesuai ketentuan untuk branch karsajobs-ui) and jobs
+workflows:
+  lint-dockerfile:
+    # Use hadolint to lint a Dockerfile
+    jobs:
+      - docker/hadolint:
+          dockerfiles: Dockerfile
+
+  build-app-karsajobs-ui:
+    jobs:
+      - build-app-karsajobs-ui
+
+
+jobs:
+  # Build and push an image from bash script, get variable from project setting - environment
+  build-app-karsajobs-ui:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: 
+          command: |
+            . build_push_image_karsajobs_ui.sh
