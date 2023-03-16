@@ -6,27 +6,36 @@ orbs:
 # Use docker elements in workflows (sesuai ketentuan untuk branch karsajobs) and jobs
 workflows:
   lint-dockerfile:
+    # Use hadolint to lint a Dockerfile
     jobs:
-      # Use hadolint to lint a Dockerfile
-      executor: docker/hadolint
-      steps:
-        - checkout
-        - docker/hadolint:
-            dockerfiles: Dockerfile
+      - docker/hadolint:
+          dockerfiles: Dockerfile
+
   test-app:
     jobs:
-      # This image can be used with the CircleCI docker executor, jalankan unit test untuk backend.
-      docker:
-        - image: cimg/go:1.20.2
-      steps:
-        - checkout
-        - run: go test -v -short --count=1 $(go list ./...)
+      - test-app
+
   build-app-karsajobs:
     jobs:
-      # Build and push an image from bash script, get variable from project setting - environment
-      executor: docker/docker
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run: |
-          . build_push_image_karsajobs.sh
+      - build-app-karsajobs
+
+
+jobs:
+  # Build and push an image from bash script, get variable from project setting - environment
+  build-app-karsajobs:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: 
+          command: |
+            . build_push_image_karsajobs.sh
+  # This image can be used with the CircleCI docker executor, jalankan unit test untuk backend.
+  test-app:
+    docker:
+      - image: cimg/go:1.20.2
+    steps:
+      - checkout
+      - run:
+          command: |
+            go test -v -short --count=1 $(go list ./...)
